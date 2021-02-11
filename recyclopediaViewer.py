@@ -4,7 +4,7 @@ from functools import partial
 import itemList
 
 '''
-TODO NEXT: favoritesView, and saving favorites between sessions
+TODO NEXT: connect with pymongo
 '''
 
 class RecyclopediaViewer:
@@ -98,6 +98,26 @@ class RecyclopediaViewer:
 
 		rec.geometry('800x600+250+150') # width x height + x_offset + y_offset
 		rec.minsize(600, 600)
+
+		maxName = self.getMaxName(self.recentDict.keys())		# getting max name so we can have uniform cells\
+
+		rowCtr = 0
+		for item in reversed(self.recentDict):
+			color = "white"
+			if(self.recentDict[item][0] == "r"):
+				color = "dodger blue"
+			elif(self.recentDict[item][0] == "c"):
+				color = "lime green"
+			elif(self.recentDict[item][0] == "t"):
+				color = "saddle brown"
+
+			itemLabel = tk.Label(rec, relief="solid", width=maxName, bg=color, text=f'{item}')
+			itemLabel.grid(column=0, row=rowCtr)
+
+			descLabel = tk.Label(rec, relief="solid", width=20, bg=color, text=f'{self.recentDict[item][1]}')
+			descLabel.grid(column=1, row=rowCtr)
+
+			rowCtr = rowCtr + 1
 
 	def resultsView(self, searchBtn):
 		self.results = tk.Toplevel()
