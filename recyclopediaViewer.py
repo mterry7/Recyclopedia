@@ -14,7 +14,7 @@ class RecyclopediaViewer:
 		self.results = None			# results window
 		self.recents = None			# recents window
 
-		self.favList = []
+		self.favDict = {}
 
 	def homeView(self):
 		'''
@@ -60,6 +60,29 @@ class RecyclopediaViewer:
 		fav.geometry('800x600+250+150') # width x height + x_offset + y_offset
 		fav.minsize(600, 600)
 
+		maxName = self.getMaxName(self.favDict.keys())		# getting max name so we can have uniform cells\
+
+		rowCtr = 0
+		for item in self.favDict:
+			color = "white"
+			if(self.favDict[item][0] == "r"):
+				color = "dodger blue"
+			elif(self.favDict[item][0] == "c"):
+				color = "lime green"
+			elif(self.favDict[item][0] == "t"):
+				color = "saddle brown"
+
+			itemLabel = tk.Label(fav, relief="solid", width=maxName, bg=color, text=f'{item}')
+			itemLabel.grid(column=0, row=rowCtr)
+
+			descLabel = tk.Label(fav, relief="solid", width=20, bg=color, text=f'{self.favDict[item][1]}')
+			descLabel.grid(column=1, row=rowCtr)
+
+			removeFavButton = tk.Button(fav, text="Remove from Favorites", command=partial(self.removeFromFavorites, item)) #button to remove from favorites list
+			removeFavButton.grid(column=2, row=rowCtr)
+
+			rowCtr = rowCtr + 1
+
 
 	def recentsView(self):
 		'''
@@ -85,33 +108,58 @@ class RecyclopediaViewer:
 
 		searchQuery = searchBtn.get()
 
-		items = itemList.items
+		results = self.getSearchResults(searchQuery)
+		maxName = self.getMaxName(results.keys())		# getting max name so we can have uniform cells
 
 		rowCtr = 0
-		for item in items.keys():
-			if(searchQuery in item):
-				if items[item][0] == "r":			#recyclable
-					itemLabel = tk.Label(res, relief="solid", width=10, text=f'{item}')
-					itemLabel.grid(column=0, row=rowCtr)
+		for item in results.keys():
+			color = "white"
+			if(results[item][0] == "r"):
+				color = "dodger blue"
+			elif(results[item][0] == "c"):
+				color = "lime green"
+			elif(results[item][0] == "t"):
+				color = "saddle brown"
 
-					descLabel = tk.Label(res, relief="solid", width=20, text=f'{items[item][1]}')
-					descLabel.grid(column=1, row=rowCtr)
+			itemLabel = tk.Label(res, relief="solid", width=maxName, bg=color, text=f'{item}')
+			itemLabel.grid(column=0, row=rowCtr)
 
-					addFavButton = tk.Button(res, text="Add to Favorites", command=partial(self.addToFavorites, item)) 	#button to add to the favorites list
-					addFavButton.grid(column=2, row=rowCtr)
+			descLabel = tk.Label(res, relief="solid", width=20, bg=color, text=f'{results[item][1]}')
+			descLabel.grid(column=1, row=rowCtr)
 
-					removeFavButton = tk.Button(res, text="Remove from Favorites", command=partial(self.removeFromFavorites, item)) #button to remove from favorites list
-					removeFavButton.grid(column=3, row=rowCtr)
-				rowCtr += 1
+			addFavButton = tk.Button(res, text="Add to Favorites", command=partial(self.addToFavorites, item)) 	#button to add to the favorites list
+			addFavButton.grid(column=2, row=rowCtr)
+
+			removeFavButton = tk.Button(res, text="Remove from Favorites", command=partial(self.removeFromFavorites, item)) #button to remove from favorites list
+			removeFavButton.grid(column=3, row=rowCtr)
+
+			rowCtr += 1
 
 		res.update()
 
 	def addToFavorites(self, itemName):
-		if itemName not in self.favList:
-			self.favList.append(itemName)
-		print(self.favList)
+		if itemName not in self.favDict:
+			self.favDict[itemName] = itemList.items[itemName]
+		print(self.favDict)
 
 	def removeFromFavorites(self, itemName):
-		if itemName in self.favList:
-			self.favList.remove(itemName)
-		print(self.favList)
+		if itemName in self.favDict:
+			self.favDict.pop(itemName)
+		print(self.favDict)
+
+	def getMaxName(self, nameList):
+		high = 0
+		for name in nameList:
+			if len(name) > high:
+				high = len(name)
+		return high
+
+	def getSearchResults(self, searchQuery):
+		if len(searchQuery) == 0:
+			return {}
+		items = itemList.items
+		resDict = {}
+		for item in items.keys():
+			if(searchQuery in item):
+				resDict[item] = items[item]
+		return resDict

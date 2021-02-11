@@ -1,1 +1,1 @@
-items = {"item": ["rec_comp_or_gar", "details"], "milk": ["r", "uhhhh wash it idk"], "milk jug": ["r", "yeah wash"]}
+items = {"item": ["rec_comp_or_gar", "details"], "milk": ["r", "uhhhh wash it idk"], "milk jug": ["r", "yeah wash"], "banana peel": ["c", "throw in compost bin"], "egg shell": ["c", "throw in compost bin"], "egg carton (styrofoam)": ["t", "throw in trash"]}
