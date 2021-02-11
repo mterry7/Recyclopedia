@@ -14,6 +14,8 @@ class RecyclopediaViewer:
 		self.results = None			# results window
 		self.recents = None			# recents window
 
+		self.recentDict = {}
+
 		self.favDict = {}
 
 	def homeView(self):
@@ -113,6 +115,12 @@ class RecyclopediaViewer:
 
 		rowCtr = 0
 		for item in results.keys():
+
+			if len(self.recentDict) < 20 and (item not in self.recentDict.keys()):
+				self.recentDict[item] = results[item]
+			elif len(self.recentDict) >= 20:
+				self.recentDict = {}
+
 			color = "white"
 			if(results[item][0] == "r"):
 				color = "dodger blue"
