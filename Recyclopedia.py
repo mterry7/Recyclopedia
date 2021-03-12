@@ -1,13 +1,13 @@
 '''
 Author: Max Terry
-Date of last modification: 2-2-2021
+Date of last modification: 3-10-2021
 Description: This is the main file to run the program
 '''
 
-import recyclopediaViewer as rec
+import homeViewer as rec
 
 def main():
-	screen = rec.RecyclopediaViewer()
+	screen = rec.HomeViewer()
 	screen.homeView()
 	return
 
